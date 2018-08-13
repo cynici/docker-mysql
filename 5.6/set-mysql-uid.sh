@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 #
 # Use this wrapper script as Docker entrypoint to set the UID and GID
-# of postgres user in container to fix data files owner
+# of 'mysql' user in container to fix data files owner
 #
 # CAVEAT:
 # - security risk if either value conflicts already in-use in the container
 #
 set -eux
+
 _uid="${MYSQL_UID:-}"
 _gid="${MYSQL_GID:-}"
+_script="${MYSQL_ENTRYPOINT:-/usr/local/bin/docker-entrypoint.sh}"
+
 if [ -n "$_uid" ] && [ -n "$_gid" ] ; then
     usermod -u $_uid mysql
     groupmod -g $_gid mysql
@@ -22,4 +25,4 @@ if [ -z "${1:-}" ] || [ "${1:0:1}" = '-' ]; then
     set -- mysqld "$@"
 fi
 # Pass control to the default entrypoint script
-exec /usr/local/bin/docker-entrypoint.sh "$@"
+exec "$_script" "$@"
