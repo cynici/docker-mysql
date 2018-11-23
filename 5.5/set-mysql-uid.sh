@@ -6,7 +6,7 @@
 # CAVEAT:
 # - security risk if either value conflicts already in-use in the container
 #
-set -eux
+set -ux
 
 _uid="${MYSQL_UID:-}"
 _gid="${MYSQL_GID:-}"
